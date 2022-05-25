@@ -21,11 +21,11 @@ def mlp(input_size, hidden_sizes, hidden_activations, output_size, output_activa
         Number of inputs
     hidden_sizes : list[int]
         List of neurons in each hidden layer
-    hidden_activations : nn.Module
+    hidden_activations : any
         Activation function used for each hidden layer
     output_size : int
         Size of the output layer
-    output_activation : nn.Module
+    output_activation : any
         Activation function used by the output layer
 
     Returns

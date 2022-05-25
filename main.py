@@ -1,14 +1,14 @@
 import torch.nn as nn
-from nns.base_nns import mlp
+from neural_networks.base_nns import mlp
 
 # CURRENTLY TESTING
 # Create a NN and check that it was created properly
 
-nn = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
-print(nn)
+neural_n = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
+print(neural_n)
 
-nn2 = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
-print(nn2)
+neural_n2 = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
+print(neural_n2)
 
-nn3 = mlp(4, [32], nn.ReLU, 16, nn.Softmax)
-print(nn3)
+neural_n3 = mlp(4, [32], nn.ReLU, 16, nn.Softmax)
+print(neural_n3)
