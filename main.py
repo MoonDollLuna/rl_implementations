@@ -1,14 +1,17 @@
+import gym
 import torch.nn as nn
-from neural_networks.base_nns import mlp
+from rl_methods import mlp
 
 # CURRENTLY TESTING
 # Create a NN and check that it was created properly
 
-neural_n = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
-print(neural_n)
 
-neural_n2 = mlp(4, [32, 64, 128], nn.ReLU, 16, nn.Softmax)
-print(neural_n2)
+env = gym.make("ALE/Pong-v5")
+print(env.observation_space.shape)
+print(env.action_space)
+print(env.action_space.n)
 
-neural_n3 = mlp(4, [32], nn.ReLU, 16, nn.Softmax)
-print(neural_n3)
+env = gym.make("HalfCheetah-v2")
+print(env.observation_space.shape)
+print(env.action_space)
+print(env.action_space.shape)

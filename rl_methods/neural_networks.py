@@ -3,7 +3,7 @@
 # Developed by Luna Jimenez Fernandez
 # Based on OpenAI Spinning Up
 #
-# This class includes the base methods to create the main types of NNs used by the algorithms
+# This class includes the base methods to create the main types of NNs used by the rl_methods
 # (mostly MLPs and CNNs)
 
 # IMPORTS
