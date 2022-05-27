@@ -12,6 +12,7 @@ from torch.distributions import Categorical
 
 from rl_methods import PolicyGradientAlgorithm, mlp
 
+# TODO MEASURE TIME
 
 # CLASS DEFINITION #
 class SimpleGradient(PolicyGradientAlgorithm):
