@@ -7,4 +7,4 @@ This module implements the most typical memory structures used by RL algorithms:
 """
 
 # IMPORTS
-from .experience import Experience
+from .experience import Experience, unpack_experiences
