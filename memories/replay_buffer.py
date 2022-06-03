@@ -131,4 +131,9 @@ class Episode:
         # Compute the reward-to-go for each experience
         for i in range(len(self.rewards)):
             reward_to_go = sum(self.rewards[i:])
-            self.rewards_to_go.append(reward_to_go
+            self.rewards_to_go.append(reward_to_go)
+
+
+# REPLAY BUFFER
+class ReplayBuffer:
+    pass
