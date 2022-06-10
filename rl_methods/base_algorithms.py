@@ -9,10 +9,14 @@
 #   * A base implementation for Value Based methods
 
 # IMPORTS #
-from typing import Tuple
+from typing import Tuple, Any
 
 from gym import Env, Space
 from gym.spaces import Box
+
+import torch
+
+from memories import ReplayBuffer
 
 
 class BaseAlgorithm:
@@ -43,6 +47,10 @@ class BaseAlgorithm:
     # This shape is always assumed to be one-dimensional, regardless of the action space type
     act_shape: int
 
+    # Device where PyTorch will be executed
+    # Can either be "cuda" or "cpu"
+    device: Any
+
     # CONSTRUCTOR
     def __init__(self, env):
 
@@ -57,12 +65,33 @@ class BaseAlgorithm:
         else:
             self.act_shape = self.act_space.n
 
+        # Check the proper device for the neural networks
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print("Using device: " + self.device)
+
     # MAIN METHODS #
     def train(self, *args, **kwargs):
         raise NotImplementedError
 
     def eval(self, *args, **kwargs):
         raise NotImplementedError
+
+    # HELPER METHODS #
+    def _to_tensor(self, observation):
+        """
+        Given an observation, converts it to a PyTorch Tensor and sends it to the proper device
+
+        Parameters
+        ----------
+        observation: Any
+
+        Returns
+        -------
+        torch.Tensor
+        """
+
+        # TODO Possible batch processing
+        return torch.as_tensor(observation, device=self.device)
 
 
 class PolicyGradientAlgorithm(BaseAlgorithm):
@@ -74,7 +103,16 @@ class PolicyGradientAlgorithm(BaseAlgorithm):
     ----------
     env : Env
         A generic Gym environment
+
+    Attributes
+    ----------
+    replay_buffer : ReplayBuffer
+        The Replay Buffer used by the policy gradient algorithm
     """
+
+    # ATTRIBUTES
+    # The Replay Buffer used by the policy gradient algorithm
+    replay_buffer: ReplayBuffer
 
     # CONSTRUCTOR #
     def __init__(self, env):
@@ -82,9 +120,15 @@ class PolicyGradientAlgorithm(BaseAlgorithm):
         # Super constructor call
         super().__init__(env)
 
+        # Initialize the replay buffer
+        self.replay_buffer = ReplayBuffer()
+
     # MAIN METHODS #
     def train(self, total_epochs, steps_per_epoch):
         raise NotImplementedError
 
     def eval(self, total_steps):
+        raise NotImplementedError
+
+    def act(self, observation):
         raise NotImplementedError

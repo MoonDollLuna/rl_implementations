@@ -164,7 +164,7 @@ class ReplayBuffer:
     episode_reward: list[float]
         Total reward for each episode, for ALL episodes
         Note: experiences of the same episode have the same reward
-    rewards_to_go: List[float]
+    rewards_to_go: list[float]
         Rewards to go for each experience within the episode, for ALL episodes
     """
 
@@ -210,7 +210,7 @@ class ReplayBuffer:
     # METHODS #
 
     # Episode management
-    def new_episode(self):
+    def start_episode(self):
         """
         Creates a new episode and sets it as the current episode
         """
@@ -291,3 +291,15 @@ class ReplayBuffer:
         self.final_flags = []
         self.episode_reward = []
         self.rewards_to_go = []
+
+    def get_epoch_info(self):
+        """
+        Returns all the info for the current epoch, to be used during training
+
+        Returns
+        -------
+        (list[Any], list[int], list[float], list[Any], list[bool], list[float], list[float])
+        """
+
+        return self.states, self.actions, self.rewards, self.next_states, \
+               self.final_flags, self.episode_reward, self.rewards_to_go
