@@ -77,21 +77,21 @@ class BaseAlgorithm:
         raise NotImplementedError
 
     # HELPER METHODS #
-    def _to_tensor(self, observation):
+    def _to_tensor(self, tensor):
         """
-        Given an observation, converts it to a PyTorch Tensor and sends it to the proper device
+        Given an element or a list, converts it to a PyTorch Tensor and sends it to the proper device
 
         Parameters
         ----------
-        observation: Any
+        tensor: Any
 
         Returns
         -------
         torch.Tensor
         """
 
-        # TODO Possible batch processing
-        return torch.as_tensor(observation, device=self.device)
+        # TODO Convertir imagenes de forma adecuada
+        return torch.as_tensor(tensor, device=self.device)
 
 
 class PolicyGradientAlgorithm(BaseAlgorithm):

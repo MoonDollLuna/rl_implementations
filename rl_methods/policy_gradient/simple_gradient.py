@@ -11,6 +11,7 @@ import torch
 from torch import Tensor
 from torch.nn import Module, ReLU, Identity
 from torch.distributions import Categorical
+from torch.optim import Adam
 
 from rl_methods import PolicyGradientAlgorithm, mlp
 from memories import ReplayBuffer
@@ -71,6 +72,10 @@ class SimpleGradient(PolicyGradientAlgorithm):
         # Prepare the logger for training
         # TODO - CREATE LOGGER
 
+        # Prepare the optimizer
+        # ADAM is used for simplicity
+        optimizer = Adam()
+
         # Perform each epoch separately
         for epoch in range(total_epochs):
 
@@ -81,6 +86,20 @@ class SimpleGradient(PolicyGradientAlgorithm):
             states, actions, rewards, \
             next_states, final_flags, \
             episode_reward, rewards_to_go = self.replay_buffer.get_epoch_info()
+
+            # Reset the optimizer gradients
+            optimizer.zero_grad()
+
+            # Obtain the loss (gradients)
+            loss = self._compute_losses(states, actions, episode_reward)
+
+            # Perform gradient descent
+            loss.backward()
+            optimizer.step()
+
+            # Flush the replay buffer after the update
+            self.replay_buffer.empty()
+
 
     def eval(self, total_steps):
         pass
@@ -168,9 +187,44 @@ class SimpleGradient(PolicyGradientAlgorithm):
                 # Mark the episode as finished
                 finished = True
 
+                # Reset the environment
+                current_obs = self.env.reset()
+
                 # Finish the episode in the buffer and start the next episode
                 self.replay_buffer.finish_episode(done)
                 self.replay_buffer.start_episode()
 
-    def _compute_losses(self):
-        pass
+    def _compute_losses(self, observations, actions, rewards):
+        """
+        Computes the loss (gradient descent) for each state-action pair
+
+        The method internally transforms all necessary lists into tensors
+
+        Parameters
+        ----------
+        observations: list[Any]
+            List of all observations (states) in an epoch
+        actions: list[int]
+            List of all actions for each corrresponding state
+        rewards: list[float]
+            List of EPISODE rewards for each state
+
+        Returns
+        -------
+        Tensor
+        """
+
+        # Convert all lists into tensors
+        observations = self._to_tensor(observations)
+        actions = self._to_tensor(actions)
+        rewards = self._to_tensor(rewards)
+
+        # Compute the log-probability of all state-action pairs
+        log_probs = self._get_categorical_policy(observations).log_prob(actions)
+
+        # Obtain the gradient and return it
+        # Negative value is used to perform gradient ascent
+        # Mean is taken since the expected mean value is used
+        gradients = -(log_probs * rewards).mean()
+
+        return gradients
