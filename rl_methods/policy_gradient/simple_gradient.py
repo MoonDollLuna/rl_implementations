@@ -16,6 +16,7 @@ from torch.optim import Adam
 from rl_methods import PolicyGradientAlgorithm, mlp
 from memories import ReplayBuffer
 
+
 # TODO MEASURE TIME
 
 
@@ -34,6 +35,7 @@ class SimpleGradient(PolicyGradientAlgorithm):
     # NETWORKS AND MEMORIES
     # Policy neural network
     policy_net: Module
+
     # Replay Buffer is created in the parent class
 
     # CONSTRUCTOR
@@ -78,7 +80,6 @@ class SimpleGradient(PolicyGradientAlgorithm):
 
         # Perform each epoch separately
         for epoch in range(total_epochs):
-
             # Handle the epoch by letting the agent run for the specified number of steps
             self._epoch(steps_per_epoch)
 
@@ -99,7 +100,6 @@ class SimpleGradient(PolicyGradientAlgorithm):
 
             # Flush the replay buffer after the update
             self.replay_buffer.empty()
-
 
     def eval(self, total_steps):
         pass
@@ -183,7 +183,6 @@ class SimpleGradient(PolicyGradientAlgorithm):
 
             # Check if the episode is over
             if done:
-
                 # Mark the episode as finished
                 finished = True
 
@@ -205,7 +204,7 @@ class SimpleGradient(PolicyGradientAlgorithm):
         observations: list[Any]
             List of all observations (states) in an epoch
         actions: list[int]
-            List of all actions for each corrresponding state
+            List of all actions for each corresponding state
         rewards: list[float]
             List of EPISODE rewards for each state
 
