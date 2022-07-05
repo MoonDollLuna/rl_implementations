@@ -3,5 +3,4 @@ This module implements utility classes and functions utilized by the rest of the
 
 Currently, this module contains:
 * Loggers to print and store information about the current execution
-
 """

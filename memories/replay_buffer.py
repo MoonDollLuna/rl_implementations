@@ -7,8 +7,6 @@
 #   - A Replay Buffer to be used as a memory for all policy gradient methods
 #   - An Episode class, containing all necessary information within an episode
 
-# TODO MEASURE TIME
-
 
 # IMPORTS #
 from typing import List, Any, Tuple, Union, Optional
