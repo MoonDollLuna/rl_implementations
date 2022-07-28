@@ -7,17 +7,16 @@
 # gradient calculation without advantages
 
 # IMPORTS #
-import torch
+import gym
+
 from torch import Tensor
 from torch.nn import Module, ReLU, Identity
 from torch.distributions import Categorical
 from torch.optim import Adam
 
 from rl_methods import PolicyGradientAlgorithm, mlp
-from memories import ReplayBuffer
-
-
-# TODO MEASURE TIME
+from rl_methods.policy_gradient import get_categorical_policy
+from utils import PolicyGradientLogger
 
 
 # CLASS DEFINITION #
@@ -72,7 +71,7 @@ class SimpleGradient(PolicyGradientAlgorithm):
         """
 
         # Prepare the logger for training
-        # TODO - CREATE LOGGER
+        logger = PolicyGradientLogger()
 
         # Prepare the optimizer
         # ADAM is used for simplicity
@@ -104,9 +103,10 @@ class SimpleGradient(PolicyGradientAlgorithm):
     def eval(self, total_steps):
         pass
 
+    # TODO PREPARE FOR DISCRETE AND CONTINUOUS
     def act(self, observation):
         """
-        Given an observation, sample and return an action to perform, identified by an int ID
+        Given an observation, sample and return an action or a list of actions to perform
 
         Parameters
         ----------
@@ -114,39 +114,22 @@ class SimpleGradient(PolicyGradientAlgorithm):
 
         Returns
         -------
-        Categorical
+        int or list
         """
 
-        # TODO Currently this method assumes a categorical policy
+        # Identify the output type
+        if isinstance(self.act_space, gym.spaces.Discrete):
 
-        # Convert the observation into a tensor
-        observation = self._to_tensor(observation)
+            # Convert the observation into a tensor
+            observation = self._to_tensor(observation)
 
-        # Create the policy from the policy network
-        policy = self._get_categorical_policy(observation)
+            # Create the policy from the policy network
+            policy = get_categorical_policy(observation)
 
-        # Return a sampled action from said policy
-        return policy.sample().item()
+            # Return a single sampled action from said policy
+            return policy.sample().item()
 
     # HELPER METHODS #
-    def _get_categorical_policy(self, observation):
-        """
-        Given an observation (in Tensor form), return a categorical policy to sample
-
-        Parameters
-        ----------
-        observation: Tensor
-
-        Returns
-        -------
-        Categorical
-        """
-
-        # Obtain the logits from the policy network
-        logits = self.policy_net(observation)
-
-        # Return the proper categorical distribution
-        return Categorical(logits=logits)
 
     def _epoch(self, total_steps):
         """

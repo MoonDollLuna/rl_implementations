@@ -11,4 +11,4 @@ Currently implemented Policy Gradient based RL methods are:
 
 # Imports
 from .neural_networks import mlp
-from .base_algorithms import BaseAlgorithm, PolicyGradientAlgorithm
+from .base_algorithms import BaseAlgorithm, PolicyGradientAlgorithm, get_categorical_policy

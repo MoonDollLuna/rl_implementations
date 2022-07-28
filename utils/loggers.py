@@ -54,5 +54,12 @@ class BaseLogger:
 
         return timestamp_time, total_time
 
+
 class PolicyGradientLogger(BaseLogger):
-    pass
+    """
+    Logger designed for Policy Gradient methods.
+
+    This logger, in addition to all BaseLogger functionality, includes the necessary methods
+    to showcase the progress during training
+    """
+

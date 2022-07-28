@@ -99,6 +99,9 @@ class PolicyGradientAlgorithm(BaseAlgorithm):
     Base class used by Policy Gradient algorithms, defining more information
     about the specific train and eval parameters required
 
+    In addition, this class includes methods used to transform logits into Categorical
+    and Continuous policies
+
     Parameters
     ----------
     env : Env
